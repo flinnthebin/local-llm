@@ -38,7 +38,6 @@ def main():
     print("------------------------------------------\n")
     barra_cuda()
     model_name = "Qwen/Qwen2.5-Coder-3B"
-    print("Loading tokenizer and model in 8-bit mode (this may take a moment)...")
     tokenizer = AutoTokenizer.from_pretrained(model_name)
     quant_cfg = BitsAndBytesConfig(load_in_8bit=True)
     model = AutoModelForCausalLM.from_pretrained(
@@ -49,7 +48,6 @@ def main():
     inputs = tokenizer(user_prompt, return_tensors="pt",
                        padding=True, truncation=True)
     inputs = {key: tensor.to("cuda") for key, tensor in inputs.items()}
-    print("Generating output...\n")
     outputs = model.generate(
         input_ids=inputs["input_ids"],
         attention_mask=inputs["attention_mask"],
